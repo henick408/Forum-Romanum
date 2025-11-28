@@ -38,8 +38,4 @@ class Post(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
-) {
-
-
-
-}
+)
