@@ -7,7 +7,7 @@ data class PostBasicDto(
     val username: String,
     var title: String,
     var content: String,
-    var category: Category,
+    var category: CategoryDto,
     val createdAt: LocalDateTime,
     val id: Long?
     )

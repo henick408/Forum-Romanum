@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 @RequestMapping("/api/posts")
 class PostController(private val postService: PostService, private val postMapper: PostMapper) {
 
-    @GetMapping("/")
+    @GetMapping
     fun getAllPosts(): ResponseEntity<List<PostBasicDto>>{
         val posts = postService.getAll()
         val postBasicDtos = posts.stream().map{post -> postMapper.mapToBasicDto(post)}.toList()
