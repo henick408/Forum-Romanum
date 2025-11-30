@@ -34,7 +34,7 @@ class PostMapperImpl(private val categoryMapper: CategoryMapper) : PostMapper {
     }
 
     override fun mapToCreateDto(post: Post): PostCreateDto {
-        val category = categoryMapper.mapToDto(post.category)
+        val category = categoryMapper.mapToCreatePostDto(post.category)
         return PostCreateDto(
             username = post.username,
             title = post.title,
@@ -44,7 +44,7 @@ class PostMapperImpl(private val categoryMapper: CategoryMapper) : PostMapper {
     }
 
     override fun mapFromCreateDto(postDto: PostCreateDto): Post {
-        val category = categoryMapper.mapFromDto(postDto.category)
+        val category = categoryMapper.mapFromCreatePostDto(postDto.category)
         return Post(
             username = postDto.username,
             title = postDto.title,
