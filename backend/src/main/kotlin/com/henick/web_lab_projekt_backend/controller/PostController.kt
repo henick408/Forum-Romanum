@@ -7,6 +7,7 @@ import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.PostMapper
 import com.henick.web_lab_projekt_backend.service.PostService
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -57,6 +58,15 @@ class PostController(private val postService: PostService, private val postMappe
         val updatedPost: Post = postService.update(id, updatePost)
         val outputPostDto = postMapper.mapToBasicDto(updatedPost)
         return ResponseEntity.ok(outputPostDto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deletePost(@PathVariable id: Long): ResponseEntity<Unit>{
+        if(!postService.existsById(id)){
+            return ResponseEntity.notFound().build()
+        }
+        postService.deleteById(id)
+        return ResponseEntity.noContent().build()
     }
 
 }

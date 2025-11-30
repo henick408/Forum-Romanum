@@ -9,4 +9,5 @@ interface PostService {
     fun create(post: Post): Post
     fun update(id: Long, post: Post): Post
     fun existsById(id: Long): Boolean
+    fun deleteById(id: Long)
 }
