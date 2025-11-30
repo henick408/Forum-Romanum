@@ -1,4 +1,9 @@
 package com.henick.web_lab_projekt_backend.service
 
+import com.henick.web_lab_projekt_backend.entity.Post
+
 interface PostService {
+
+    fun getAll(): List<Post>
+    fun getById(id: Long): Post?
 }

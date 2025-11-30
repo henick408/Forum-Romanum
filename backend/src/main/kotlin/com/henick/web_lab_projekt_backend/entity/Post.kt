@@ -33,8 +33,6 @@ class Post(
     val comments: MutableList<Comment> = mutableListOf(),
     @Column(nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
-    @Column(nullable = false)
-    var updatedAt: LocalDateTime = LocalDateTime.now(),
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null
