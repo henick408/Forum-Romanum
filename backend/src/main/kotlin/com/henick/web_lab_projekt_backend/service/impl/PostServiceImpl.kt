@@ -15,4 +15,8 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService{
     override fun getById(id: Long): Post? =
         postRepository.findByIdOrNull(id)
 
+    override fun create(post: Post): Post {
+        return postRepository.save(post)
+    }
+
 }

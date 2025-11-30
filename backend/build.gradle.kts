@@ -9,7 +9,7 @@ plugins {
 
 group = "com.henick"
 version = "0.0.1-SNAPSHOT"
-description = "Demo project for Spring Boot"
+description = "Projekt programowanie aplikacji mobilnych"
 
 java {
 	toolchain {
@@ -36,6 +36,7 @@ dependencies {
     implementation("org.flywaydb:flyway-database-postgresql")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-flyway")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.14")
     compileOnly("org.projectlombok:lombok")
 	runtimeOnly("org.postgresql:postgresql")
 	annotationProcessor("org.projectlombok:lombok")

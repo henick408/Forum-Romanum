@@ -1,6 +1,7 @@
 package com.henick.web_lab_projekt_backend.mapper.impl
 
 import com.henick.web_lab_projekt_backend.dto.PostBasicDto
+import com.henick.web_lab_projekt_backend.dto.PostCreateDto
 import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CategoryMapper
 import com.henick.web_lab_projekt_backend.mapper.PostMapper
@@ -29,6 +30,26 @@ class PostMapperImpl(private val categoryMapper: CategoryMapper) : PostMapper {
             category = category,
             createdAt = postDto.createdAt,
             id = postDto.id
+        )
+    }
+
+    override fun mapToCreateDto(post: Post): PostCreateDto {
+        val category = categoryMapper.mapToDto(post.category)
+        return PostCreateDto(
+            username = post.username,
+            title = post.title,
+            content = post.content,
+            category = category
+        )
+    }
+
+    override fun mapFromCreateDto(postDto: PostCreateDto): Post {
+        val category = categoryMapper.mapFromDto(postDto.category)
+        return Post(
+            username = postDto.username,
+            title = postDto.title,
+            content = postDto.content,
+            category = category
         )
     }
 }

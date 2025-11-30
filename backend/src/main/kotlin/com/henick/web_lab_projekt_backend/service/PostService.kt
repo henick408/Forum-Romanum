@@ -6,4 +6,5 @@ interface PostService {
 
     fun getAll(): List<Post>
     fun getById(id: Long): Post?
+    fun create(post: Post): Post
 }
