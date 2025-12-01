@@ -17,7 +17,7 @@ class Comment(
     var content: String,
     @ManyToOne
     @JoinColumn(name = "post_id")
-    val post: Post,
+    val post: Post?,
     @Column(name = "created_at", nullable = false)
     val createdAt: LocalDateTime = LocalDateTime.now(),
     @Id

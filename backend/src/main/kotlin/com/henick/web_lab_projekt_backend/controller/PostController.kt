@@ -1,10 +1,13 @@
 package com.henick.web_lab_projekt_backend.controller
 
+import com.henick.web_lab_projekt_backend.dto.CommentDto
 import com.henick.web_lab_projekt_backend.dto.PostBasicDto
 import com.henick.web_lab_projekt_backend.dto.PostCreateDto
 import com.henick.web_lab_projekt_backend.dto.PostUpdateDto
 import com.henick.web_lab_projekt_backend.entity.Post
+import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.mapper.PostMapper
+import com.henick.web_lab_projekt_backend.service.CommentService
 import com.henick.web_lab_projekt_backend.service.PostService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -19,7 +22,12 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api/posts")
-class PostController(private val postService: PostService, private val postMapper: PostMapper) {
+class PostController(
+    private val postService: PostService,
+    private val postMapper: PostMapper,
+    private val commentService: CommentService,
+    private val commentMapper: CommentMapper
+) {
 
     @GetMapping
     fun getAllPosts(): ResponseEntity<List<PostBasicDto>>{
@@ -67,6 +75,17 @@ class PostController(private val postService: PostService, private val postMappe
         }
         postService.deleteById(id)
         return ResponseEntity.noContent().build()
+    }
+
+    @GetMapping("/{id}/comments")
+    fun getCommentsFromPost(@PathVariable id: Long): ResponseEntity<List<CommentDto>> {
+        val post = postService.getById(id)
+        if (post == null) {
+            return ResponseEntity.notFound().build()
+        }
+        val comments = commentService.getAllCommentsForPost(id)
+        val commentDtos = comments.map{comment -> commentMapper.mapToDto(comment)}.toList()
+        return ResponseEntity.ok(commentDtos)
     }
 
 }
