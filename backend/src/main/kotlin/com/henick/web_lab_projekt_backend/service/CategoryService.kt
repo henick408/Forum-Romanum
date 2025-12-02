@@ -7,4 +7,6 @@ interface CategoryService {
     fun getById(id: Long): Category?
     fun create(category: Category): Category
     fun existsByName(name: String): Boolean
+    fun deleteById(id: Long)
+    fun existsById(id: Long): Boolean
 }

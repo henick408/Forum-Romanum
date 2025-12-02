@@ -49,6 +49,13 @@ class CategoryController(private val categoryService: CategoryService, private v
         return ResponseEntity.created(location).body(outputCategoryDto)
     }
 
-
+    @DeleteMapping("/{id}")
+    fun deleteCategory(@PathVariable id: Long): ResponseEntity<Unit> {
+        if (!categoryService.existsById(id)) {
+            return ResponseEntity.notFound().build()
+        }
+        categoryService.deleteById(id)
+        return ResponseEntity.noContent().build()
+    }
 
 }

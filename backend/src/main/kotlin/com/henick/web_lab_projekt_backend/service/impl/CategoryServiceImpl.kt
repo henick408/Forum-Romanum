@@ -25,4 +25,12 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository) : 
         return categoryRepository.existsCategoryByName(name)
     }
 
+    override fun deleteById(id: Long) {
+        categoryRepository.deleteById(id)
+    }
+
+    override fun existsById(id: Long): Boolean {
+        return categoryRepository.existsById(id)
+    }
+
 }
