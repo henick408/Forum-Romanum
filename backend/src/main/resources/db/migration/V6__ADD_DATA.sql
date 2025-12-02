@@ -39,7 +39,7 @@ VALUES
     ('Marcel',
      'It''s over',
      'Chłopaki robimy zrzute na operacje w Turcji',
-     (SELECT id FROM category WHERE name = 'koty'),
+     (SELECT id FROM category WHERE name = 'zakola'),
      TIMESTAMP 'now',
      TIMESTAMP 'now'
     );
