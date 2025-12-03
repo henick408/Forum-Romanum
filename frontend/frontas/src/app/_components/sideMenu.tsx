@@ -85,7 +85,7 @@ export default function SideMenu() {
   return (
     <div
       ref={containerRef}
-      className="relative overflow-y-hidden  flex min-w-3/12 my-2 rounded items-start min-h-[calc(100vh-8rem)] bg-blue-300 opacity-80 gap-6 p-6 flex-col text-zinc-600"
+      className="relative overflow-y-hidden  flex min-w-3/12 my-2 rounded items-center min-h-[calc(100vh-8rem)] bg-blue-300 opacity-80 gap-6 p-6 flex-col text-zinc-600"
     >
       {Array.from(visiblePatterns).map((pos, idx) => (
         <div
