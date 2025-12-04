@@ -2,13 +2,15 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import RoundPattern from "../assets/roundPattern";
+interface SendCat {
+  sendCat: (data: number) => void;
+}
+interface Category {
+  id: number;
+  name: string;
+}
 
-export default function SideMenu() {
-  interface Category {
-    id: number;
-    name: string;
-  }
-
+export default function SideMenu({ sendCat }: SendCat) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [visiblePatterns, setVisiblePatterns] = useState<Set<number>>(
@@ -116,12 +118,22 @@ export default function SideMenu() {
           style={{ fontFamily: "EB Garamond, serif" }}
           className="flex flex-col gap-1 pl-2 pt-2 text-lg select-none"
         >
+          <div
+            className="hover:text-zinc-900 hover:cursor-pointer"
+            onClick={() => {
+              sendCat(-1);
+            }}
+          >
+            Wszystkie
+          </div>
           {loading ? (
             <div>Ładowanie kategorii...</div>
           ) : sortedCategories.length > 0 ? (
             sortedCategories.map((cat) => (
               <div
-                onClick={() => {}}
+                onClick={() => {
+                  sendCat(cat.id);
+                }}
                 key={cat.id}
                 className="hover:text-zinc-900 hover:cursor-pointer"
               >
