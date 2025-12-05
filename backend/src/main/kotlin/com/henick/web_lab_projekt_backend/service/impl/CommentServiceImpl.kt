@@ -28,4 +28,8 @@ class CommentServiceImpl(private val commentRepository: CommentRepository) : Com
         return commentRepository.existsById(commentId)
     }
 
+    override fun create(comment: Comment): Comment {
+        return commentRepository.save(comment)
+    }
+
 }

@@ -9,4 +9,5 @@ interface CommentService {
     fun getAllForPostPaged(postId: Long, pageable: Pageable): Page<Comment>
     fun getForPostByCommentId(postId: Long, commentId: Long): Comment?
     fun existsById(commentId: Long): Boolean
+    fun create(comment: Comment): Comment
 }
