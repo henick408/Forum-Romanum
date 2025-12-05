@@ -7,4 +7,6 @@ import org.springframework.data.domain.Pageable
 interface CommentService {
     fun getAllForPost(postId: Long): List<Comment>
     fun getAllForPostPaged(postId: Long, pageable: Pageable): Page<Comment>
+    fun getForPostByCommentId(postId: Long, commentId: Long): Comment?
+    fun existsById(commentId: Long): Boolean
 }

@@ -1,8 +1,8 @@
 package com.henick.web_lab_projekt_backend.mapper.impl
 
-import com.henick.web_lab_projekt_backend.dto.PostBasicDto
-import com.henick.web_lab_projekt_backend.dto.PostCreateDto
-import com.henick.web_lab_projekt_backend.dto.PostUpdateDto
+import com.henick.web_lab_projekt_backend.dto.post.PostBasicDto
+import com.henick.web_lab_projekt_backend.dto.post.PostCreateDto
+import com.henick.web_lab_projekt_backend.dto.post.PostUpdateDto
 import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CategoryMapper
 import com.henick.web_lab_projekt_backend.mapper.PostMapper

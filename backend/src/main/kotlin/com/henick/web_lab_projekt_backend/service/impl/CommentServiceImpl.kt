@@ -10,11 +10,22 @@ import org.springframework.stereotype.Service
 @Service
 class CommentServiceImpl(private val commentRepository: CommentRepository) : CommentService{
     override fun getAllForPost(postId: Long): List<Comment> {
-        return commentRepository.getCommentsByPostId(postId)
+        return commentRepository.findCommentsByPostId(postId)
     }
 
     override fun getAllForPostPaged(postId: Long, pageable: Pageable): Page<Comment> {
-        return commentRepository.getCommentsByPostId(postId, pageable)
+        return commentRepository.findCommentsByPostId(postId, pageable)
+    }
+
+    override fun getForPostByCommentId(
+        postId: Long,
+        commentId: Long
+    ): Comment? {
+        return commentRepository.findCommentByPostIdAndId(postId, commentId)
+    }
+
+    override fun existsById(commentId: Long): Boolean {
+        return commentRepository.existsById(commentId)
     }
 
 }

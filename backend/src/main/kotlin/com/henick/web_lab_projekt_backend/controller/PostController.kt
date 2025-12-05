@@ -1,9 +1,9 @@
 package com.henick.web_lab_projekt_backend.controller
 
-import com.henick.web_lab_projekt_backend.dto.CommentDto
-import com.henick.web_lab_projekt_backend.dto.PostBasicDto
-import com.henick.web_lab_projekt_backend.dto.PostCreateDto
-import com.henick.web_lab_projekt_backend.dto.PostUpdateDto
+import com.henick.web_lab_projekt_backend.dto.comment.CommentDto
+import com.henick.web_lab_projekt_backend.dto.post.PostBasicDto
+import com.henick.web_lab_projekt_backend.dto.post.PostCreateDto
+import com.henick.web_lab_projekt_backend.dto.post.PostUpdateDto
 import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.mapper.PostMapper
@@ -72,10 +72,11 @@ class PostController(
         @RequestBody updateDto: PostUpdateDto,
         @PathVariable id: Long
     ): ResponseEntity<PostBasicDto> {
-        if(!postService.existsById(id)){
+        val post = postService.getById(id)
+        if(post == null){
             return ResponseEntity.notFound().build()
         }
-        val username = postService.getById(id)?.username.toString()
+        val username = post.username
         val updatePost = postMapper.mapFromUpdateDto(updateDto)
         val updatedPost: Post = postService.update(id, updatePost)
         updatedPost.username = username
@@ -103,13 +104,30 @@ class PostController(
         pageable: Pageable,
         @PathVariable id: Long
     ): ResponseEntity<Page<CommentDto>> {
-        val post = postService.getById(id)
-        if (post == null) {
+        if (!postService.existsById(id)) {
             return ResponseEntity.notFound().build()
         }
         val comments = commentService.getAllForPostPaged(id, pageable)
         val commentDtos = comments.map{comment -> commentMapper.mapToDto(comment)}
         return ResponseEntity.ok(commentDtos)
+    }
+
+    @GetMapping("/{postId}/comments/{commentId}")
+    fun getCommentFromPostByCommentId(
+        @PathVariable postId: Long,
+        @PathVariable commentId: Long
+    ): ResponseEntity<CommentDto>{
+
+        val comment = commentService.getForPostByCommentId(postId, commentId)
+
+        if (comment == null){
+            return ResponseEntity.notFound().build()
+        }
+
+        val commentDto = commentMapper.mapToDto(comment)
+
+        return ResponseEntity.ok(commentDto)
+
     }
 
 }
