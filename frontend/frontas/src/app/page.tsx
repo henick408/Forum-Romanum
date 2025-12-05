@@ -4,6 +4,7 @@ import SideMenu from "./_components/sideMenu";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Post from "./_components/post";
+import PostPostForm from "./_components/postPostForm";
 
 export default function Home() {
   type PostProps = {
@@ -19,6 +20,7 @@ export default function Home() {
     id: number;
   };
   const [cat, setCat] = useState(-1);
+  const [showForm, setShowForm] = useState(false);
 
   const [posts, setPosts] = useState<PostProps[]>([]);
   const [loading, setLoading] = useState(true);
@@ -26,6 +28,9 @@ export default function Home() {
   const handleCat = (data: number) => {
     setCat(data); // aktualizujemy stan w komponencie wyżej
     console.log(cat);
+  };
+  const handleShowForm = () => {
+    setShowForm(!showForm);
   };
 
   useEffect(() => {
@@ -46,9 +51,14 @@ export default function Home() {
     <div className="min-h-screen bg-zinc-50 cursor-default">
       <Header />
       <div className="flex justify-between w-full">
-        <SideMenu sendCat={handleCat} />
+        <SideMenu
+          sendCat={handleCat}
+          onAddPost={handleShowForm}
+          showForm={showForm}
+        />
 
         <div className="w-full flex flex-col items-center">
+          {showForm && <PostPostForm />}
           {loading ? (
             <div>ładowańsko</div>
           ) : posts.length === 0 ? (

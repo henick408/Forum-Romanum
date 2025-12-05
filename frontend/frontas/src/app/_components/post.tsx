@@ -1,5 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Markdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import Comment from "./comment";
 
 type PostProps = {
@@ -47,7 +49,7 @@ export default function Post({ post: props }: PostProps) {
   return (
     <div
       style={{ fontFamily: "EB Garamond, serif" }}
-      className=" flex flex-col px-4 py-3 bg-zinc-50 w-11/12 border-blue-100 border-2 rounded text-zinc-700"
+      className=" flex flex-col px-4 py-3 bg-zinc-50 w-11/12 border-blue-100 border-2 rounded text-zinc-800"
     >
       <div className="flex justify-between">
         <div className="text-2xl ">{props.title}</div>
@@ -57,7 +59,41 @@ export default function Post({ post: props }: PostProps) {
         </div>
       </div>
       <div className="px-1">kategoria: {props.category.name}</div>
-      <div className=" p-2 text-lg">{props.content}</div>
+      <Markdown
+        className="p-2 text-zinc-800"
+        remarkPlugins={[remarkGfm]}
+        components={{
+          h1: ({ ...props }) => <h1 {...props} className="py-2 text-3xl" />,
+          h2: ({ ...props }) => <h2 {...props} className="py-1 text-2xl" />,
+          h3: ({ ...props }) => <h3 {...props} className="py-1 text-xl" />,
+          p: ({ ...props }) => (
+            <p {...props} className="text-lg text-justify mb-2" />
+          ),
+          ul: ({ ...props }) => (
+            <ul {...props} className="list-disc ml-6 mb-2" />
+          ),
+          ol: ({ ...props }) => (
+            <ol {...props} className="list-decimal ml-6 mb-2" />
+          ),
+          li: ({ ...props }) => <li {...props} className="mb-1" />,
+          code: ({ ...props }) => <code {...props} className=" px-1 rounded" />,
+          pre: ({ ...props }) => (
+            <pre
+              {...props}
+              className="bg-zinc-100 p-2 rounded overflow-x-auto"
+            />
+          ),
+          blockquote: ({ ...props }) => (
+            <blockquote
+              {...props}
+              className="border-l-4 border-gray-400 pl-4 italic my-2"
+            />
+          ),
+        }}
+      >
+        {props.content}
+      </Markdown>
+
       <div
         className="w-full h-px bg-blue-100 transform-gpu"
         style={{ height: "1.2px", willChange: "transform" }} //kreska ale lepsza!

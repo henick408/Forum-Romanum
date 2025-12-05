@@ -2,15 +2,18 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import RoundPattern from "../assets/roundPattern";
+import Markdown from "./markdownEditor";
 interface SendCat {
   sendCat: (data: number) => void;
+  onAddPost: () => void;
+  showForm: boolean;
 }
 interface Category {
   id: number;
   name: string;
 }
 
-export default function SideMenu({ sendCat }: SendCat) {
+export default function SideMenu({ sendCat, onAddPost, showForm }: SendCat) {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [visiblePatterns, setVisiblePatterns] = useState<Set<number>>(
@@ -100,9 +103,10 @@ export default function SideMenu({ sendCat }: SendCat) {
       ))}
       <div
         style={{ fontFamily: "EB Garamond, serif" }}
-        className="text-3xl bg-zinc-100 shadow p-3 rounded-2xl text-zinc-700 select-none z-10 hover:text-zinc-900 hover:cursor-pointer"
+        onClick={onAddPost}
+        className="text-3xl w-48 text-center bg-zinc-100 shadow p-3 rounded-2xl text-zinc-700 select-none z-10 hover:text-zinc-900 hover:cursor-pointer"
       >
-        Dodaj wpis +
+        {showForm ? "Anuluj wpis –" : "Dodaj wpis +"}
       </div>
 
       <div className="flex flex-col items-start w-full p-3 bg-blue-50 rounded z-10">
