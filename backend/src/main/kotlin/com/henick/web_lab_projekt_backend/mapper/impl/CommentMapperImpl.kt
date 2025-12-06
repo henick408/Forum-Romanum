@@ -35,16 +35,15 @@ class CommentMapperImpl(private val postMapper: PostMapper) : CommentMapper{
         return CommentCreateDto(
             username = comment.username,
             content = comment.content,
-            post = post
+            postId = comment.post.id!!
         )
     }
 
-    override fun mapFromCreateDto(commentDto: CommentCreateDto): Comment {
-        val postDto = postMapper.mapFromCreateCommentDto(commentDto.post)
+    override fun mapFromCreateDto(commentDto: CommentCreateDto, post: Post): Comment {
         return Comment(
             username = commentDto.username,
             content = commentDto.content,
-            post = postDto
+            post = post
         )
     }
 }

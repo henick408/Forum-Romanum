@@ -4,6 +4,7 @@ import com.henick.web_lab_projekt_backend.dto.comment.CommentCreateDto
 import com.henick.web_lab_projekt_backend.dto.comment.CommentDto
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.service.CommentService
+import com.henick.web_lab_projekt_backend.service.PostService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -15,13 +16,21 @@ import java.net.URI
 
 @RestController
 @RequestMapping("/api/comments")
-class CommentController(private val commentService: CommentService, val commentMapper: CommentMapper) {
+class CommentController(
+    private val commentService: CommentService,
+    val commentMapper: CommentMapper,
+    private val postService: PostService
+) {
 
 
 
     @PostMapping
     fun createComment(@RequestBody commentDto: CommentCreateDto): ResponseEntity<CommentDto> {
-        val comment = commentMapper.mapFromCreateDto(commentDto)
+        val post = postService.getById(commentDto.postId)
+        if (post == null){
+            return ResponseEntity.badRequest().build()
+        }
+        val comment = commentMapper.mapFromCreateDto(commentDto, post)
         val createdComment = commentService.create(comment)
         val outputCommentDto = commentMapper.mapToDto(createdComment)
 

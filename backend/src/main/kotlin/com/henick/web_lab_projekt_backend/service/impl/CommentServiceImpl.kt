@@ -5,6 +5,7 @@ import com.henick.web_lab_projekt_backend.repository.CommentRepository
 import com.henick.web_lab_projekt_backend.service.CommentService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -22,6 +23,10 @@ class CommentServiceImpl(private val commentRepository: CommentRepository) : Com
         commentId: Long
     ): Comment? {
         return commentRepository.findCommentByPostIdAndId(postId, commentId)
+    }
+
+    override fun getById(commentId: Long): Comment? {
+        return commentRepository.findByIdOrNull(commentId)
     }
 
     override fun existsById(commentId: Long): Boolean {
