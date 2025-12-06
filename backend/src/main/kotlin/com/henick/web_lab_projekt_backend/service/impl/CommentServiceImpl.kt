@@ -49,4 +49,8 @@ class CommentServiceImpl(private val commentRepository: CommentRepository) : Com
         return commentRepository.save(comment)
     }
 
+    override fun deleteById(id: Long) {
+        commentRepository.deleteById(id)
+    }
+
 }

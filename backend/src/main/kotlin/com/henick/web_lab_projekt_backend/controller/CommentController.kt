@@ -3,11 +3,11 @@ package com.henick.web_lab_projekt_backend.controller
 import com.henick.web_lab_projekt_backend.dto.comment.CommentCreateDto
 import com.henick.web_lab_projekt_backend.dto.comment.CommentDto
 import com.henick.web_lab_projekt_backend.dto.comment.CommentUpdateDto
-import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.service.CommentService
 import com.henick.web_lab_projekt_backend.service.PostService
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -67,6 +67,16 @@ class CommentController(
         val outputCommentDto = commentMapper.mapToDto(updatedComment)
 
         return ResponseEntity.ok(outputCommentDto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun deleteComment(@PathVariable id: Long): ResponseEntity<Unit> {
+        if (!commentService.existsById(id)) {
+            return ResponseEntity.notFound().build()
+        }
+        commentService.deleteById(id)
+
+        return ResponseEntity.noContent().build()
     }
 
 }

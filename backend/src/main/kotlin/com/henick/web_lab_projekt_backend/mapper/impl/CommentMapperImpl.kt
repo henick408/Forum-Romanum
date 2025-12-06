@@ -7,11 +7,10 @@ import com.henick.web_lab_projekt_backend.entity.Category
 import com.henick.web_lab_projekt_backend.entity.Comment
 import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
-import com.henick.web_lab_projekt_backend.mapper.PostMapper
 import org.springframework.stereotype.Component
 
 @Component
-class CommentMapperImpl(private val postMapper: PostMapper) : CommentMapper{
+class CommentMapperImpl() : CommentMapper{
     override fun mapToDto(comment: Comment): CommentDto {
         return CommentDto(
             username = comment.username,
