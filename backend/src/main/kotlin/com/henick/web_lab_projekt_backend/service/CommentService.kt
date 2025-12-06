@@ -11,4 +11,5 @@ interface CommentService {
     fun getById(commentId: Long): Comment?
     fun existsById(commentId: Long): Boolean
     fun create(comment: Comment): Comment
+    fun update(id: Long, comment: Comment): Comment
 }

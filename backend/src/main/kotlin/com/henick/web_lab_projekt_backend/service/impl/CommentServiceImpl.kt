@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CommentServiceImpl(private val commentRepository: CommentRepository) : CommentService{
@@ -34,6 +35,17 @@ class CommentServiceImpl(private val commentRepository: CommentRepository) : Com
     }
 
     override fun create(comment: Comment): Comment {
+        comment.createdAt = LocalDateTime.now()
+        return commentRepository.save(comment)
+    }
+
+    override fun update(
+        id: Long,
+        comment: Comment
+    ): Comment {
+        val existingComment = commentRepository.findByIdOrNull(id)
+        comment.id = id
+        comment.createdAt = existingComment?.createdAt
         return commentRepository.save(comment)
     }
 

@@ -2,6 +2,8 @@ package com.henick.web_lab_projekt_backend.controller
 
 import com.henick.web_lab_projekt_backend.dto.comment.CommentCreateDto
 import com.henick.web_lab_projekt_backend.dto.comment.CommentDto
+import com.henick.web_lab_projekt_backend.dto.comment.CommentUpdateDto
+import com.henick.web_lab_projekt_backend.entity.Post
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.service.CommentService
 import com.henick.web_lab_projekt_backend.service.PostService
@@ -9,6 +11,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -47,6 +50,23 @@ class CommentController(
         val location = URI("/api/posts/${createdComment.post.id}/comments/$commentId")
 
         return ResponseEntity.created(location).body(outputCommentDto)
+    }
+
+    @PutMapping("/{id}")
+    fun updateComment(@PathVariable id: Long, commentDto: CommentUpdateDto): ResponseEntity<CommentDto>{
+        val comment = commentService.getById(id)
+        if (comment == null) {
+            return ResponseEntity.notFound().build()
+        }
+
+        val post = postService.getById(comment.post.id!!)!!
+        val username = comment.username
+        val inputComment = commentMapper.mapFromUpdateDto(commentDto, post)
+        inputComment.username = username
+        val updatedComment = commentService.update(id, inputComment)
+        val outputCommentDto = commentMapper.mapToDto(updatedComment)
+
+        return ResponseEntity.ok(outputCommentDto)
     }
 
 }
