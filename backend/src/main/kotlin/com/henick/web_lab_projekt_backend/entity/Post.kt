@@ -10,15 +10,23 @@ import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
+import jakarta.validation.constraints.Max
+import jakarta.validation.constraints.NotNull
 import java.time.LocalDateTime
 
 @Entity
 class Post(
     @Column(nullable = false)
+    @NotNull
+    @Max(255)
     var username: String,
     @Column(nullable = false)
+    @NotNull
+    @Max(255)
     var title: String,
     @Column(nullable = false)
+    @NotNull
+    @Max(4000)
     var content: String,
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
