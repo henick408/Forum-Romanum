@@ -4,6 +4,7 @@ import com.henick.web_lab_projekt_backend.dto.category.CategoryCreateDto
 import com.henick.web_lab_projekt_backend.dto.category.CategoryDto
 import com.henick.web_lab_projekt_backend.mapper.CategoryMapper
 import com.henick.web_lab_projekt_backend.service.CategoryService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -24,7 +25,7 @@ class CategoryController(private val categoryService: CategoryService, private v
     @GetMapping()
     fun getAllCategories(@RequestParam name: String?): ResponseEntity<List<CategoryDto>> {
         if(name == null) {
-            val categories = categoryService.getAll();
+            val categories = categoryService.getAll()
             val categoryDtos = categories.map { category -> categoryMapper.mapToDto(category) }.toList()
             return ResponseEntity.ok(categoryDtos)
         }
@@ -45,7 +46,7 @@ class CategoryController(private val categoryService: CategoryService, private v
     }
 
     @PostMapping()
-    fun createCategory(@RequestBody categoryDto: CategoryCreateDto): ResponseEntity<CategoryDto> {
+    fun createCategory(@Valid @RequestBody categoryDto: CategoryCreateDto): ResponseEntity<CategoryDto> {
         val category = categoryMapper.mapFromCreateDto(categoryDto)
         if (categoryService.existsByName(categoryDto.name)){
             return ResponseEntity(HttpStatus.CONFLICT)
@@ -68,7 +69,7 @@ class CategoryController(private val categoryService: CategoryService, private v
     @PutMapping("/{id}")
     fun updateCategory(
         @PathVariable id: Long,
-        @RequestBody categoryDto: CategoryCreateDto
+        @Valid @RequestBody categoryDto: CategoryCreateDto
     ): ResponseEntity<CategoryDto> {
         if(!categoryService.existsById(id)) {
             return ResponseEntity.notFound().build()

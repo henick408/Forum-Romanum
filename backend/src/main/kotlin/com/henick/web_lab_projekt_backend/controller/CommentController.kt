@@ -6,6 +6,7 @@ import com.henick.web_lab_projekt_backend.dto.comment.CommentUpdateDto
 import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.service.CommentService
 import com.henick.web_lab_projekt_backend.service.PostService
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -37,7 +38,7 @@ class CommentController(
     }
 
     @PostMapping
-    fun createComment(@RequestBody commentDto: CommentCreateDto): ResponseEntity<CommentDto> {
+    fun createComment(@Valid @RequestBody commentDto: CommentCreateDto): ResponseEntity<CommentDto> {
         val post = postService.getById(commentDto.postId)
         if (post == null){
             return ResponseEntity.badRequest().build()
@@ -53,7 +54,10 @@ class CommentController(
     }
 
     @PutMapping("/{id}")
-    fun updateComment(@PathVariable id: Long, commentDto: CommentUpdateDto): ResponseEntity<CommentDto>{
+    fun updateComment(
+        @PathVariable id: Long,
+        @Valid @RequestBody commentDto: CommentUpdateDto
+    ): ResponseEntity<CommentDto>{
         val comment = commentService.getById(id)
         if (comment == null) {
             return ResponseEntity.notFound().build()

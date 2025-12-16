@@ -8,6 +8,7 @@ import com.henick.web_lab_projekt_backend.mapper.CommentMapper
 import com.henick.web_lab_projekt_backend.mapper.PostMapper
 import com.henick.web_lab_projekt_backend.service.CommentService
 import com.henick.web_lab_projekt_backend.service.PostService
+import jakarta.validation.Valid
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -58,7 +59,7 @@ class PostController(
     }
 
     @PostMapping
-    fun createPost(@RequestBody postCreateDto: PostCreateDto): ResponseEntity<PostBasicDto> {
+    fun createPost(@Valid @RequestBody postCreateDto: PostCreateDto): ResponseEntity<PostBasicDto> {
         val post = postMapper.mapFromCreateDto(postCreateDto)
         val createdPost = postService.create(post)
         val outputPostDto = postMapper.mapToBasicDto(createdPost)
@@ -68,7 +69,7 @@ class PostController(
 
     @PutMapping("/{id}")
     fun updatePost(
-        @RequestBody updateDto: PostUpdateDto,
+        @Valid @RequestBody updateDto: PostUpdateDto,
         @PathVariable id: Long
     ): ResponseEntity<PostBasicDto> {
         val post = postService.getById(id)
