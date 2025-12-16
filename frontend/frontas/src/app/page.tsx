@@ -1,7 +1,7 @@
 "use client";
 import Header from "./_components/header";
 import SideMenu from "./_components/sideMenu";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Post from "./_components/post";
 import PostPostForm from "./_components/postPostForm";
@@ -24,6 +24,9 @@ export default function Home() {
 
   const [posts, setPosts] = useState<PostProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const scrollPosRef = useRef(0);
 
   const handleCat = (data: number) => {
     setCat(data); // aktualizujemy stan w komponencie wyżej
@@ -35,18 +38,40 @@ export default function Home() {
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setLoading(true);
       try {
-        const res = await axios.get("http://localhost:8080/api/posts");
-        setPosts(res.data);
+        const res = await axios.get("http://localhost:8080/api/posts", {
+          params: {
+            page,
+            size: 5,
+          },
+        });
+
+        const newPosts = res.data.content;
+
+        setPosts((prev) => [...prev, ...newPosts]);
+        setHasMore(!res.data.last); // Spring Pageable
       } catch (err) {
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
+
     fetchPosts();
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    if (page === 0) return;
+
+    window.scrollTo({
+      top: scrollPosRef.current,
+      behavior: "auto",
+    });
+  }, [posts]);
+
   console.log(posts);
+
   return (
     <div className="min-h-screen bg-zinc-50 cursor-default">
       <Header />
@@ -74,6 +99,17 @@ export default function Home() {
                   <Post post={post} />
                 </div>
               ))
+          )}
+          {hasMore && !loading && (
+            <button
+              onClick={() => {
+                scrollPosRef.current = window.scrollY;
+                setPage((prev) => prev + 1);
+              }}
+              className="mt-6 px-8 py-3 bg-blue-200 rounded-xl text-lg text-zinc-800 m-5 hover:cursor-pointer hover:bg-blue-300"
+            >
+              Załaduj więcej
+            </button>
           )}
         </div>
       </div>

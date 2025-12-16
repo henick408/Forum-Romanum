@@ -2,7 +2,6 @@
 import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import RoundPattern from "../assets/roundPattern";
-import Markdown from "./markdownEditor";
 interface SendCat {
   sendCat: (data: number) => void;
   onAddPost: () => void;

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import Comment from "./comment";
+import PostCommentForm from "./postCommentForm";
 
 type PostProps = {
   post: {
@@ -29,6 +30,7 @@ type CommentProps = {
 export default function Post({ post: props }: PostProps) {
   const [comments, setComments] = useState<CommentProps[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -36,7 +38,7 @@ export default function Post({ post: props }: PostProps) {
         const res = await axios.get(
           `http://localhost:8080/api/posts/${props.id}/comments`
         );
-        setComments(res.data);
+        setComments(res.data.content);
       } catch (err) {
         console.error(err);
       } finally {
@@ -53,8 +55,12 @@ export default function Post({ post: props }: PostProps) {
     >
       <div className="flex justify-between">
         <div className="text-2xl ">{props.title}</div>
-        <div className="flex gap-3">
-          <div>{props.createdAt}</div>
+        <div className="flex gap-3 whitespace-pre">
+          <div>
+            {props.createdAt.slice(0, 10) +
+              "   " +
+              props.createdAt.slice(11, 19)}
+          </div>
           <div className="brightness-95 font-semibold">{props.username}</div>
         </div>
       </div>
@@ -111,9 +117,13 @@ export default function Post({ post: props }: PostProps) {
         ) : (
           <div></div>
         )}
-        <div className=" bg-blue-100 hover:bg-blue-200 hover:cursor-pointer rounded-2xl mx-2 mt-2 px-3 w-fit p-2">
-          Dodaj komentarz
+        <div
+          className=" bg-blue-100 hover:bg-blue-200 hover:cursor-pointer rounded-2xl mx-2 mt-2 px-3 w-36 text-center p-2"
+          onClick={() => setShowForm(!showForm)}
+        >
+          {!showForm ? "Dodaj Komentarz" : "Anuluj komentarz"}
         </div>
+        {showForm ? <PostCommentForm postId={props.id} /> : <></>}
       </div>
 
       {

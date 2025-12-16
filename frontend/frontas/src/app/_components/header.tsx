@@ -6,7 +6,7 @@ export default function Header() {
       <div className=" flex items-center  gap-4 ">
         <div
           style={{ fontFamily: "EB Garamond, serif" }} //AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-          className=" text-5xl text-white select-none "
+          className=" text-5xl text-white select-none max-[1200px]:text-3xl"
         >
           FORUM ROMANUM
         </div>
