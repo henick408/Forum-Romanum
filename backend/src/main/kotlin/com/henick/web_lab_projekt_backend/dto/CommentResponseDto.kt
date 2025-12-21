@@ -6,5 +6,6 @@ data class CommentResponseDto(
     val username: String,
     val content: String,
     val createdAt: LocalDateTime,
+    val postId: Long,
     val id: Long?
 )

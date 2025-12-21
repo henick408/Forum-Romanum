@@ -12,6 +12,7 @@ class CommentMapperImpl() : CommentMapper{
             username = comment.username,
             content = comment.content,
             createdAt = comment.createdAt!!,
+            postId = comment.post.id!!,
             id = comment.id
         )
     }
