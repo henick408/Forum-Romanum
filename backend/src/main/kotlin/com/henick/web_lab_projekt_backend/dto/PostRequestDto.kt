@@ -13,7 +13,7 @@ data class PostRequestDto(
 
     @field:NotBlank(
         message = "Tytuł posta nie może być pusty",
-        groups = [OnCreate::class]
+        groups = [OnCreate::class, OnUpdate::class]
     )
     @field:Size(
         max = 255,

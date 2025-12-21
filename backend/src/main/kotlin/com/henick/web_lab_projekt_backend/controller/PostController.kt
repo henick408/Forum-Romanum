@@ -1,27 +1,14 @@
 package com.henick.web_lab_projekt_backend.controller
 
-import com.henick.web_lab_projekt_backend.dto.CommentResponseDto
-import com.henick.web_lab_projekt_backend.dto.PostResponseDto
-import com.henick.web_lab_projekt_backend.dto.PostRequestDto
-import com.henick.web_lab_projekt_backend.dto.PostUpdateDto
-import com.henick.web_lab_projekt_backend.mapper.CommentMapper
-import com.henick.web_lab_projekt_backend.mapper.PostMapper
-import com.henick.web_lab_projekt_backend.service.CommentService
-import com.henick.web_lab_projekt_backend.service.PostService
-import jakarta.validation.Valid
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
+import com.henick.web_lab_projekt_backend.dto.*
+import com.henick.web_lab_projekt_backend.mapper.*
+import com.henick.web_lab_projekt_backend.service.*
+import com.henick.web_lab_projekt_backend.validation.*
+import org.springframework.data.domain.*
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.validation.annotation.Validated
+import org.springframework.web.bind.annotation.*
 
 import java.net.URI
 
@@ -51,15 +38,12 @@ class PostController(
 
     @GetMapping("/{id}")
     fun getPostById(@PathVariable id: Long): ResponseEntity<PostResponseDto> {
-        val post = postService.getById(id)
-        if (post == null){
-            return ResponseEntity.notFound().build()
-        }
+        val post = postService.getById(id) ?: return ResponseEntity.notFound().build()
         return ResponseEntity.ok(postMapper.mapToResponseDto(post))
     }
 
     @PostMapping
-    fun createPost(@Valid @RequestBody postCreateDto: PostRequestDto): ResponseEntity<PostResponseDto> {
+    fun createPost(@Validated(OnCreate::class) @RequestBody postCreateDto: PostRequestDto): ResponseEntity<PostResponseDto> {
         val post = postMapper.mapFromRequestDto(postCreateDto)
         val createdPost = postService.create(post)
         val outputPostDto = postMapper.mapToResponseDto(createdPost)
@@ -69,16 +53,13 @@ class PostController(
 
     @PutMapping("/{id}")
     fun updatePost(
-        @Valid @RequestBody updateDto: PostUpdateDto,
+        @Validated(OnUpdate::class) @RequestBody updateDto: PostRequestDto,
         @PathVariable id: Long
     ): ResponseEntity<PostResponseDto> {
-        val post = postService.getById(id)
-        if(post == null){
-            return ResponseEntity.notFound().build()
-        }
-        val username = post.username
-        val inputPost = postMapper.mapFromUpdateDto(updateDto)
-        inputPost.username = username
+        //val post = postService.getById(id) ?: return ResponseEntity.notFound().build()
+        //val username = post.username
+        val inputPost = postMapper.mapFromRequestDto(updateDto)
+        //inputPost.username = username
         val updatedPost = postService.update(id, inputPost)
         val outputPostDto = postMapper.mapToResponseDto(updatedPost)
         return ResponseEntity.ok(outputPostDto)
@@ -118,11 +99,8 @@ class PostController(
         @PathVariable commentId: Long
     ): ResponseEntity<CommentResponseDto>{
 
-        val comment = commentService.getForPostByCommentId(postId, commentId)
-
-        if (comment == null){
-            return ResponseEntity.notFound().build()
-        }
+        val comment =
+            commentService.getForPostByCommentId(postId, commentId) ?: return ResponseEntity.notFound().build()
 
         val commentDto = commentMapper.mapToResponseDto(comment)
 

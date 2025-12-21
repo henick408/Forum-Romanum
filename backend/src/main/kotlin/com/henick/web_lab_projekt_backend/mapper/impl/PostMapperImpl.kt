@@ -1,7 +1,7 @@
 package com.henick.web_lab_projekt_backend.mapper.impl
 
 import com.henick.web_lab_projekt_backend.dto.*
-import com.henick.web_lab_projekt_backend.entity.Post
+import com.henick.web_lab_projekt_backend.entity.*
 import com.henick.web_lab_projekt_backend.mapper.*
 import org.springframework.stereotype.Component
 
@@ -34,21 +34,20 @@ class PostMapperImpl(private val categoryMapper: CategoryMapper) : PostMapper {
     }
 
     override fun mapToRequestDto(post: Post): PostRequestDto {
-        val category = categoryMapper.mapToPostDto(post.category)
         return PostRequestDto(
             username = post.username,
             title = post.title,
             content = post.content,
-            category = category
+            categoryId = post.category.id
         )
     }
 
     override fun mapFromRequestDto(postDto: PostRequestDto): Post {
-        val category = categoryMapper.mapFromPostDto(postDto.category)
+        val category = Category("", postDto.categoryId)
         return Post(
-            username = postDto.username,
-            title = postDto.title,
-            content = postDto.content,
+            username = postDto.username!!,
+            title = postDto.title!!,
+            content = postDto.content!!,
             category = category
         )
     }

@@ -21,19 +21,6 @@ class CategoryMapperImpl : CategoryMapper{
         )
     }
 
-    override fun mapToPostDto(category: Category): CategoryCreatePostDto {
-        return CategoryCreatePostDto(
-            id = category.id
-        )
-    }
-
-    override fun mapFromPostDto(categoryDto: CategoryCreatePostDto): Category {
-        return Category(
-            id = categoryDto.id,
-            name = ""
-        )
-    }
-
     override fun mapToRequestDto(category: Category): CategoryRequestDto {
         return CategoryRequestDto(
             name = category.name

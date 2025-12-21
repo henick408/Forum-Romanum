@@ -36,26 +36,10 @@ class CommentMapperImpl() : CommentMapper{
 
     override fun mapFromRequestDto(commentDto: CommentRequestDto, post: Post): Comment {
         return Comment(
-            username = commentDto.username,
-            content = commentDto.content,
+            username = commentDto.username!!,
+            content = commentDto.content!!,
             post = post
         )
     }
 
-    override fun mapToUpdateDto(comment: Comment): CommentUpdateDto {
-        return CommentUpdateDto(
-            content = comment.content
-        )
-    }
-
-    override fun mapFromUpdateDto(
-        commentDto: CommentUpdateDto,
-        post: Post
-    ): Comment {
-        return Comment(
-            username = "",
-            content = commentDto.content,
-            post = post
-        )
-    }
 }
