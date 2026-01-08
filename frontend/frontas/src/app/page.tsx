@@ -66,9 +66,9 @@ export default function Home() {
 
     window.scrollTo({
       top: scrollPosRef.current,
-      behavior: "auto",
+      behavior: "smooth",
     });
-  }, [posts]);
+  }, [posts, page]);
 
   console.log(posts);
 
@@ -106,7 +106,8 @@ export default function Home() {
                 scrollPosRef.current = window.scrollY;
                 setPage((prev) => prev + 1);
               }}
-              className="mt-6 px-8 py-3 bg-blue-200 rounded-xl text-lg text-zinc-800 m-5 hover:cursor-pointer hover:bg-blue-300"
+              style={{ fontFamily: "EB Garamond, serif" }}
+              className="mt-6 px-8 py-3 bg-blue-200 rounded-xl text-xl text-zinc-800 m-5 hover:cursor-pointer hover:bg-blue-300"
             >
               Załaduj więcej
             </button>

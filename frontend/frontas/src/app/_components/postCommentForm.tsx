@@ -1,6 +1,6 @@
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 type CommentType = {
@@ -19,8 +19,9 @@ export default function PostCommentForm({ postId }: PropType) {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting, isSubmitSuccessful, errors },
   } = useForm<CommentType>({
+    mode: "onChange",
     defaultValues: {
       username: "",
       content: "",
@@ -48,8 +49,15 @@ export default function PostCommentForm({ postId }: PropType) {
         <label className="">Nazwa użytkownika:</label>
         <input
           className="border-blue-200 border rounded-xl p-1.5 w-full"
-          {...register("username", { required: true })}
+          {...register("username", {
+            required: "Pole jest wymagane",
+            minLength: { value: 1, message: "Za krótka nazwa" },
+            maxLength: { value: 32, message: "Za długa nazwa" },
+          })}
         />
+        {errors.username && (
+          <p className="text-red-600 text-sm mt-1">{errors.username.message}</p>
+        )}
       </div>
 
       {/* md editor */}

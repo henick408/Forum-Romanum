@@ -2,6 +2,7 @@ import MDEditor, { commands } from "@uiw/react-md-editor";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import Select from "react-select";
 
 type CategoryType = {
   id: number;
@@ -12,9 +13,7 @@ type PostType = {
   username: string;
   title: string;
   content: string;
-  category: {
-    id: number;
-  };
+  categoryId: number;
 };
 
 export default function PostPostForm() {
@@ -25,17 +24,18 @@ export default function PostPostForm() {
     register,
     handleSubmit,
     reset,
-    formState: { isSubmitting, isSubmitSuccessful },
+    setValue,
+    formState: { isSubmitting, isSubmitSuccessful, errors },
   } = useForm<PostType>({
+    mode: "onChange",
     defaultValues: {
       username: "",
       title: "",
       content: "",
-      category: { id: 0 },
+      categoryId: 0,
     },
   });
 
-  // Pobranie kategorii z API przy montowaniu komponentu
   useEffect(() => {
     async function fetchCategories() {
       try {
@@ -51,6 +51,10 @@ export default function PostPostForm() {
   }, []);
 
   const onSubmit: SubmitHandler<PostType> = async (data) => {
+    if (!mdValue.trim()) {
+      alert("Treść wpisu nie może być pusta");
+      return;
+    }
     const payload = { ...data, content: mdValue };
     console.log("POST PAYLOAD:", payload);
     await postPost(payload);
@@ -63,6 +67,11 @@ export default function PostPostForm() {
     a.name.localeCompare(b.name)
   );
 
+  const categoryOptions = sortedCategories.map((c) => ({
+    value: c.id,
+    label: c.name.charAt(0).toUpperCase() + c.name.slice(1),
+  }));
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -71,11 +80,18 @@ export default function PostPostForm() {
     >
       {/* username */}
       <div>
-        <label className="">Nazwa użytkownika:</label>
+        <label>Nazwa użytkownika:</label>
         <input
           className="border-blue-200 border rounded-xl p-1.5 w-full"
-          {...register("username", { required: true })}
+          {...register("username", {
+            required: "Pole jest wymagane",
+            minLength: { value: 1, message: "Za krótka nazwa" },
+            maxLength: { value: 32, message: "Za długa nazwa" },
+          })}
         />
+        {errors.username && (
+          <p className="text-red-600 text-sm mt-1">{errors.username.message}</p>
+        )}
       </div>
 
       {/* title */}
@@ -83,24 +99,68 @@ export default function PostPostForm() {
         <label className="">Tytuł:</label>
         <input
           className="border-blue-200 border rounded-xl  p-1.5 w-full"
-          {...register("title", { required: true })}
+          {...register("title", {
+            required: "Pole jest wymagane",
+            minLength: { value: 1, message: "Za krótki tutuł" },
+            maxLength: { value: 255, message: "Za długi tutył" },
+          })}
         />
+        {errors.title && (
+          <p className="text-red-600 text-sm mt-1">{errors.title.message}</p>
+        )}
       </div>
 
       {/* category */}
       <div>
         <label className="">Kategoria:</label>
-        <select
-          className="border-blue-300 border rounded-xl p-2 w-full"
-          {...register("category.id", { valueAsNumber: true })}
-        >
-          <option value={0}>Wybierz kategorię</option>
-          {sortedCategories.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.name.charAt(0).toUpperCase() + c.name.slice(1)}
-            </option>
-          ))}
-        </select>
+        <Select
+          required={true}
+          options={categoryOptions}
+          placeholder=""
+          onChange={(option) => setValue("categoryId", option?.value || 0)}
+          isClearable
+          styles={{
+            control: (provided, state) => ({
+              ...provided,
+              borderRadius: "0.75rem",
+              borderWidth: state.isFocused ? "2px " : "1px",
+              borderColor: state.isFocused ? "#000000" : "#93c5fd",
+              boxShadow: "none",
+              cursor: "text",
+              "&:hover": {
+                borderColor: state.isFocused ? "#000000" : "#93c5fd",
+              },
+              padding: "0.1rem 0.5rem",
+              fontFamily: "EB Garamond, serif",
+            }),
+            placeholder: (provided) => ({
+              ...provided,
+              color: "#1e293b",
+            }),
+            singleValue: (provided) => ({
+              ...provided,
+              color: "#1e293b",
+            }),
+            menu: (provided) => ({
+              ...provided,
+              borderRadius: "0.75rem",
+              fontFamily: "EB Garamond, serif",
+            }),
+            option: (provided, state) => ({
+              ...provided,
+              backgroundColor: state.isFocused ? "#bfdbfe" : "white", // hover kolor jak hover:bg-blue-200
+              color: "#1e293b",
+              cursor: "pointer",
+              borderColor: "#93c5fd",
+            }),
+          }}
+        />
+
+        {errors.categoryId && (
+          <p className="text-red-600 text-sm mt-1">
+            {errors.categoryId.message}
+          </p>
+        )}
       </div>
 
       {/* md editor */}
@@ -108,7 +168,6 @@ export default function PostPostForm() {
         <label className="font-semibold"></label>
         <div className="border-blue-300 border rounded ">
           <MDEditor
-            style={{ fontFamily: "EB Garamond, serif" }}
             value={mdValue}
             onChange={(val) => setMdValue(val || "")}
             visibleDragbar={false}
@@ -122,6 +181,9 @@ export default function PostPostForm() {
               commands.image,
             ]}
             extraCommands={[commands.codeEdit, commands.codePreview]}
+            textareaProps={{
+              style: { fontFamily: "EB Garamond, serif" },
+            }}
           />
         </div>
       </div>

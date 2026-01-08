@@ -2,7 +2,7 @@ type CommentProps = {
   comment: {
     username: string;
     content: string;
-    CreatedAt: string;
+    createdAt: string;
     id: number;
   };
 };
@@ -14,7 +14,9 @@ export default function Comment({ comment: props }: CommentProps) {
         <div className="text-blue-400 opacity-75 brightness-95 font-semibold">
           {props.username}
         </div>
-        <div>{props.CreatedAt}</div>
+        <div className=" text-zinc-500 text-sm">
+          {props.createdAt.slice(0, 10) + "   " + props.createdAt.slice(11, 19)}
+        </div>
       </div>
       <div className="p-1">{props.content}</div>
       <div
