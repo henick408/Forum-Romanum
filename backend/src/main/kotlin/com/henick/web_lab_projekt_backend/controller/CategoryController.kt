@@ -36,7 +36,7 @@ class CategoryController(private val categoryService: CategoryService, private v
     @PostMapping()
     fun createCategory(@Validated(OnCreate::class) @RequestBody categoryDto: CategoryRequestDto): ResponseEntity<CategoryResponseDto> {
         val category = categoryMapper.mapFromRequestDto(categoryDto)
-        if (categoryService.existsByName(categoryDto.name)){
+        if (categoryService.existsByName(categoryDto.name.lowercase())){
             return ResponseEntity(HttpStatus.CONFLICT)
         }
         val createdCategory = categoryService.create(category)

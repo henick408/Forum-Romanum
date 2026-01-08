@@ -22,6 +22,7 @@ class CategoryServiceImpl(private val categoryRepository: CategoryRepository) : 
     }
 
     override fun create(category: Category): Category {
+        category.name = category.name.lowercase()
         return categoryRepository.save(category)
     }
 
