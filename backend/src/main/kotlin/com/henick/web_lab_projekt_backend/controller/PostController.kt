@@ -29,11 +29,19 @@ class PostController(
             sort = ["createdAt"],
             direction = Sort.Direction.DESC
         )
-        pageable: Pageable
+        pageable: Pageable,
+        @RequestParam("categoryid") categoryId: Long?
     ): ResponseEntity<Page<PostResponseDto>>{
-        val page = postService.getAllPaged(pageable)
-        val pageDto = page.map{post -> postMapper.mapToResponseDto(post)}
+
+        if (categoryId == null) {
+            val page = postService.getAllPaged(pageable)
+            val pageDto = page.map { post -> postMapper.mapToResponseDto(post) }
+            return ResponseEntity.ok(pageDto)
+        }
+        val page = postService.getPagedByCategoryId(pageable, categoryId)
+        val pageDto = page.map { post -> postMapper.mapToResponseDto(post) }
         return ResponseEntity.ok(pageDto)
+
     }
 
     @GetMapping("/{id}")

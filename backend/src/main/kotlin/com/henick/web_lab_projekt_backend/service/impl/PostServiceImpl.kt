@@ -21,6 +21,13 @@ class PostServiceImpl(private val postRepository: PostRepository) : PostService{
         return postRepository.findAll(pageable)
     }
 
+    override fun getPagedByCategoryId(
+        pageable: Pageable,
+        categoryId: Long
+    ): Page<Post> {
+        return postRepository.findPostsByCategoryId(pageable, categoryId)
+    }
+
     override fun create(post: Post): Post {
         post.createdAt = LocalDateTime.now()
         post.updatedAt = LocalDateTime.now()

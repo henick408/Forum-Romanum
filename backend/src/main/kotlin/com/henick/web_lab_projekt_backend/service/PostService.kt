@@ -8,6 +8,7 @@ interface PostService {
     fun getAll(): List<Post>
     fun getById(id: Long): Post?
     fun getAllPaged(pageable: Pageable): Page<Post>
+    fun getPagedByCategoryId(pageable: Pageable, categoryId: Long): Page<Post>
     fun create(post: Post): Post
     fun update(id: Long, post: Post): Post
     fun existsById(id: Long): Boolean
