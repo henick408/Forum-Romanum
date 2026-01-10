@@ -4,6 +4,7 @@ import com.henick.web_lab_projekt_backend.dto.*
 import com.henick.web_lab_projekt_backend.mapper.*
 import com.henick.web_lab_projekt_backend.service.*
 import com.henick.web_lab_projekt_backend.validation.*
+import org.springdoc.core.annotations.ParameterObject
 import org.springframework.data.domain.*
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
@@ -23,6 +24,7 @@ class PostController(
 
     @GetMapping
     fun getAllPosts(
+        @ParameterObject
         @PageableDefault(
             page = 0,
             size = 10,
@@ -64,10 +66,7 @@ class PostController(
         @Validated(OnUpdate::class) @RequestBody updateDto: PostRequestDto,
         @PathVariable id: Long
     ): ResponseEntity<PostResponseDto> {
-        //val post = postService.getById(id) ?: return ResponseEntity.notFound().build()
-        //val username = post.username
         val inputPost = postMapper.mapFromRequestDto(updateDto)
-        //inputPost.username = username
         val updatedPost = postService.update(id, inputPost)
         val outputPostDto = postMapper.mapToResponseDto(updatedPost)
         return ResponseEntity.ok(outputPostDto)
@@ -84,6 +83,7 @@ class PostController(
 
     @GetMapping("/{id}/comments")
     fun getCommentsFromPost(
+        @ParameterObject
         @PageableDefault(
             page = 0,
             size = 5,

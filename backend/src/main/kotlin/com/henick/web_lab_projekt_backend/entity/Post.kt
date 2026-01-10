@@ -19,6 +19,13 @@ class Post(
     @JoinColumn(name = "category_id")
     var category: Category,
 
+    @OneToMany(
+        mappedBy = "post",
+        cascade = [CascadeType.ALL],
+        orphanRemoval = true
+    )
+    var comments: MutableList<Comment> = mutableListOf(),
+
     @Column(name = "created_at", nullable = false)
     var createdAt: LocalDateTime? = null,
 
